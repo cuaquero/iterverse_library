@@ -50,6 +50,7 @@
       <app-file-drag-and-drop-upload [acceptableExtensions]="acceptedExtensions" (dropped)="dropped($event)"
                                      [uploadText]="t('upload-text')" />
       <div class="form-text">{{t('supported', {extensions: acceptedExtensions})}}</div>
+      <div class="form-text">{{t('epub-hint')}}</div>
 
       @if (queue().length > 0) {
         <ul class="list-group mt-3">

@@ -2375,6 +2375,7 @@
         "shared-folder-placeholder": "Folder name",
         "upload-text": "books",
         "supported": "Supported: {{extensions}}",
+        "epub-hint": "Epubs without series information in their metadata may not appear after the scan. Naming the file like \"Series Name Vol 1.epub\" is the most reliable fix.",
         "unsupported": "{{name}} is not a supported book format",
         "too-large": "File is too large for the server to accept",
         "proxy-limit-warning": "Over 100 MB: this will likely be rejected when uploading through library.iterverse.net. Copy it onto the server directly instead.",

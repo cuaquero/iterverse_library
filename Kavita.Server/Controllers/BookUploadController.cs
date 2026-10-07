@@ -58,6 +58,9 @@ public class BookUploadController(
         var root = library.Folders.Select(f => f.Path).FirstOrDefault(p => Parser.NormalizePath(p) == normalizedFolder);
         if (root == null) return BadRequest("Folder does not belong to this library");
 
+        // Reject path separators outright rather than sanitising them into a confusing folder name like ".._.._x"
+        if (seriesFolder.IndexOfAny(['/', '\\']) >= 0) return BadRequest("Folder name cannot contain slashes");
+
         var fileName = SanitizeName(Path.GetFileName(file.FileName));
         var folderName = SanitizeName(seriesFolder);
         if (fileName == null || folderName == null) return BadRequest("Invalid file or folder name");
