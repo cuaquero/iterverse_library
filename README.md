@@ -2,7 +2,7 @@
   <img src="docs/assets/iterverse/mark.svg" width="96px" height="96px" alt="Iterverse Library logo" />
 </div>
 
-# Iterverse Library
+<h1 align="center">Iterverse Library</h1>
 
 The e-book and reading server for [Iterverse](https://github.com/cuaquero/iterverse_hub),
 BTECH IT's umbrella student/staff platform. Production runs at
