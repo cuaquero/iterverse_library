@@ -8,7 +8,7 @@
 // actual signed assertion (`Cf-Access-Jwt-Assertion` header) against
 // Cloudflare's own public keys instead.
 //
-// Copied verbatim from koodo-bridge's functions/lib/access.ts - that
+// Copied verbatim from iterverse_labs/platform-auth/access.ts - that
 // file's own comment says it's meant to be copied into every Iterverse
 // service's own codebase the same way design-system/ is, not just the
 // service that happened to build it first. Keep this in sync with the

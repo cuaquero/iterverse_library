@@ -3,7 +3,7 @@
 // Why this exists: Cloudflare Access's own OIDC SaaS-application feature
 // can authenticate a user into Kavita, but has no way to hand Kavita a
 // role claim derived from Access's own policies/groups (see
-// docs/kavita-fork-investigation.md in the main koodo-bridge repo for the
+// the Kavita fork investigation notes (kept in the retired koodo-bridge repo) for the
 // full research trail - the short version is that Access's per-IdP claim
 // mapping only pulls from an *external* connected identity provider,
 // which this account doesn't have; Access's own native policies/groups
@@ -12,11 +12,11 @@
 // This Worker fills that gap: it IS the OIDC provider Kavita talks to
 // (its `authority`), but the actual authentication is still 100%
 // Cloudflare Access - this Worker's own `/authorize` route sits behind a
-// normal Access Application (OTP), the exact same pattern koodo-bridge's
-// own functions/api/auth/access.ts uses for Reader's login. After Access
+// normal Access Application (OTP), the same pattern the retired Reader's
+// functions/api/auth/access.ts used for its login. After Access
 // has verified who someone is, this Worker does two things Access alone
 // can't: (1) checks the Iterverse roster service for an active
-// enrollment - same `checkRosterEntitlement` rule Reader's own
+// enrollment - same `checkRosterEntitlement` rule the retired Reader's own
 // access.ts enforces, via roster.ts copied verbatim from there - since
 // Access authenticating someone only proves they control an email
 // address, not that they're a real enrolled BTECH person; and (2) looks
@@ -47,7 +47,7 @@ export interface Env {
   CLIENT_ID: string;
   /** The client_secret Kavita's oidcConfig is configured with (Worker secret) */
   CLIENT_SECRET: string;
-  /** The exact redirect_uri Kavita will send - e.g. https://reader-test.iterverse.net/signin-oidc */
+  /** The exact redirect_uri Kavita will send - e.g. https://library.iterverse.net/signin-oidc */
   ALLOWED_REDIRECT_URI: string;
   /** kid for the signing key below */
   SIGNING_KID: string;
@@ -125,7 +125,7 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
 
   // Defense in depth: this route is meant to sit entirely behind a
   // Cloudflare Access Application, but never trust that alone - verify
-  // the actual signed assertion the same way access.ts does for Reader.
+  // the actual signed assertion via access.ts.
   const jwt = request.headers.get("Cf-Access-Jwt-Assertion");
   const email = jwt ? await verifyAccessJwt(jwt, env.ACCESS_TEAM_DOMAIN, env.ACCESS_AUD) : null;
   if (!email) {
@@ -134,8 +134,8 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
 
   // Access authenticating someone only proves they control that email
   // address - it says nothing about whether they're a real, currently
-  // enrolled BTECH person. Mirrors Reader's own access.ts: reject before
-  // ever minting a code, same as Reader rejects before creating a session.
+  // enrolled BTECH person. Same rule the retired Reader's access.ts used: reject before
+  // ever minting a code, rather than after creating a session.
   const entitled = await checkRosterEntitlement(env, email);
   if (!entitled) {
     const redirect = new URL(redirectUri);
